@@ -1,15 +1,15 @@
 class Solution:
     def containsDuplicate(self, nums: List[int]) -> bool:
-        # Optimize for time complexity - we create a hash map
-        # create an empty set
-        hashset = set()
-        # iterate through the numbers list
-        for n in nums:
-            # if n is in hashset return true
-            if n in hashset:
+        # optimize for space complexity rather than time complexity
+        # sort each nums
+        nums.sort()
+        # iterate thoruhg sorted array
+        for i in range(len(nums) - 1):
+            # Compare each element with the one after it
+            if nums[i] == nums[i+1]:
+                # If the same return true
                 return True
-            # add elements from nums into hashset
-            hashset.add(n)
+        # otherwise return False
         return False
 
 
