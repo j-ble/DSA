@@ -1,47 +1,41 @@
 class Solution:
     def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
-        lines = []
-        current_line = []
-        current_length = 0
-        
-        for word in words:
-            if not current_line:
-                current_line.append(word)
-                current_length = len(word)
+        # we need to pack the words into lines with exaclty maxWidth characters 
+        res = []
+        i = 0
+        # we need to process all words
+        while i < len(words):
+            # we need to find how many words fit into current line
+            lineWords = []
+            lineLength = 0
+            # we iterate through words, pack greedily into lines
+            while i < len(words):
+                # we check if adding next word would exceed maxWidth
+                # we need at least 1 space between each word
+                if lineLength + len(words[i]) + len(lineWords) > maxWidth:
+                    break
+                lineWords.append(words[i])
+                lineLength += len(words[i])
+                i += 1
+            # we build the line with proper spacing 
+            # if last line or single word, left-justified
+            if i == len(words) or len(lineWords) == 1:
+                line = ' '.join(lineWords)
+                line += ' ' * (maxWidth - len(line))
             else:
-                required = current_length + len(word) + len(current_line)
-                if required <= maxWidth:
-                    current_line.append(word)
-                    current_length += len(word)
-                else:
-                    lines.append(current_line)
-                    current_line = [word]
-                    current_length = len(word)
-        if current_line:
-            lines.append(current_line)
-        
-        result = []
-        for i in range(len(lines)):
-            line = lines[i]
-            if i == len(lines) - 1:
-                s = ' '.join(line)
-                s += ' ' * (maxWidth - len(s))
-            elif len(line) == 1:
-                s = line[0] + ' ' * (maxWidth - len(line[0]))
-            else:
-                sum_length = sum(len(word) for word in line)
-                total_spaces = maxWidth - sum_length
-                gaps = len(line) - 1
-                space_between = total_spaces // gaps
-                extra_spaces = total_spaces % gaps
-                s = ''
-                for j in range(len(line)):
-                    s += line[j]
+                # we need to distribute spaces evenly 
+                totalSpaces = maxWidth - lineLength
+                gaps = len(lineWords) - 1
+                spacesPerGap = totalSpaces // gaps
+                extraSpaces = totalSpaces % gaps
+                # we build line with distributed spaces
+                line = ""
+                for j, word in enumerate(lineWords):
+                    line += word
                     if j < gaps:
-                        spaces = space_between
-                        if j < extra_spaces:
-                            spaces += 1
-                        s += ' ' * spaces
-            result.append(s)
-        
-        return result
+                        # we must add base spaces plus 1 extra for leftmost gaps 
+                        line += ' ' * (spacesPerGap + (1 if j < extraSpaces else 0))
+            res.append(line)
+        return res
+# Time Complexity O(n) where n is total chars in all words
+# Space Complexity O(n) for the res array
