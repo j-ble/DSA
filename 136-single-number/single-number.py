@@ -6,3 +6,5 @@ class Solution:
         for n in nums:
             res = n ^ res
         return res
+# Time Complexity O(n) since it iterates through every number in the array
+# Space Complexity O(1) since there is no extra data structure is create and only on variable is used. 
