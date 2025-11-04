@@ -13,3 +13,5 @@ class Solution:
             end = start + n
             res.append(original[start:end])
         return res
+# Time Complexity is O(n * m) because the loop runs m times and the cost of creating the slice is O(n)
+# Space Complexity is O(n * m) because the space need grows with the size of the input array
